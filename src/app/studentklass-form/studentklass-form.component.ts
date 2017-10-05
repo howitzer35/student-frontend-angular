@@ -7,24 +7,24 @@ import { NgForm } from '@angular/forms';
 import { DataService } from '../data.service'
 
 @Component({
-  selector: 'app-student-form',
-  templateUrl: './student-form.component.html',
-  styleUrls: ['./student-form.component.css']
+  selector: 'app-studentklass-form',
+  templateUrl: './studentklass-form.component.html',
+  styleUrls: ['./studentklass-form.component.css']
 })
-export class StudentFormComponent implements OnInit {
+export class StudentklassFormComponent implements OnInit {
 
-  studentForm: NgForm;
-  @ViewChild('studentForm') currentForm: NgForm;
+  studentklassForm: NgForm;
+  @ViewChild('studentKlassForm') currentForm: NgForm;
 
   successMessage: string;
   errorMessage: string;
 
-  student: any;
+  studentklass: any;
 
   getRecordForEdit(){
     this.route.params
-      .switchMap((params: Params) => this.dataService.getRecord("student", +params['id']))
-      .subscribe(student => this.student = student);
+      .switchMap((params: Params) => this.dataService.getRecord("studentklass", +params['id']))
+      .subscribe(student => this.studentklass = student);
   }
 
   constructor(
@@ -41,19 +41,18 @@ export class StudentFormComponent implements OnInit {
   }
 
   saveStudent(student: NgForm){
-    if(typeof student.value.student_id === "number"){
-      this.dataService.editRecord("student", student.value, student.value.student_id)
+    if(typeof student.value.studentklass_id === "number"){
+      this.dataService.editRecord("studentklass", student.value, student.value.studentklass_id)
           .subscribe(
             student => this.successMessage = "Record updated succesfully",
             error =>  this.errorMessage = <any>error);
     }else{
-      this.dataService.addRecord("student", student.value)
+      this.dataService.addRecord("studentklass", student.value)
           .subscribe(
             student => this.successMessage = "Record added succesfully",
             error =>  this.errorMessage = <any>error);
-            this.student = {};
+            this.studentklass = {};
     }
-
   }
 
   ngAfterViewChecked() {
@@ -61,15 +60,15 @@ export class StudentFormComponent implements OnInit {
   }
 
   formChanged() {
-    this.studentForm = this.currentForm;
-    this.studentForm.valueChanges
+    this.studentklassForm = this.currentForm;
+    this.studentklassForm.valueChanges
       .subscribe(
         data => this.onValueChanged(data)
       );
   }
 
   onValueChanged(data?: any) {
-    let form = this.studentForm.form;
+    let form = this.studentklassForm.form;
 
     for (let field in this.formErrors) {
       // clear previous error message (if any)
@@ -86,39 +85,18 @@ export class StudentFormComponent implements OnInit {
   }
 
   formErrors = {
-    'first_name': '',
-    'last_name': '',
-    'start_date': '',
-    'gpa': '',
-    'sat': '',
-    'major_id': '',
+    'student_id': '',
+    'klass_id': ''
   };
 
   validationMessages = {
-    'first_name': {
-      'required': 'First name is required.',
-      'minlength': 'First name must be at least 1 character long.',
+    'student_id': {
+      'required': 'Student ID name is required.',
+      'type': 'Student ID must be a number.'
     },
-    'last_name': {
-      'required': 'Last name is required.',
-      'minlength': 'Last name must be at least 2 characters long.',
-    },
-    'start_date': {
-      'required': 'Start date is required.',      
-      'pattern': 'Start date should be in the following format: YYYY-MM-DD'
-    },
-    'gpa': {
-      'required': 'GPA is required.',
-      'pattern': 'GPA must be a decimal'
-    },
-    'sat': {
-      'required': 'SAT score is required.',
-      'maxlength': 'SAT score cannot be more than 4 characters long.',
-      'pattern': 'SAT score must be a number.'
-    },
-    'major_id': {
-      'required': 'Major ID is required.',      
-      'pattern': 'Major ID must be a number.'
+    'klass_id': {
+      'required': 'Student ID name is required.',      
+      'type': 'Class ID must be a number.'
     }
   };
 
